@@ -235,27 +235,17 @@ def sign_in(
         home_page(driver)
 
     WebDriverWait(driver, 20).until(
-        expected_conditions.presence_of_element_located(
-            (
-                By.CSS_SELECTOR,
-                ".ius-hosted-ui-main-container, "
-                "#ius-link-use-a-different-id-known-device, "
-                "#ius-userid, "
-                "#ius-identifier, "
-                "#ius-option-username, "
-                '[data-testid="IdentifierFirstSubmitButton"], '
-                '[data-testid="AccountChoicesUseDifferentId"]',
-            )
-        )
+        expected_conditions.presence_of_element_located((By.ID, "Logon"))
     )
 
     driver.implicitly_wait(0)  # seconds
 
-    user_selection_page(driver)
+    # user_selection_page(driver)
 
     driver.implicitly_wait(1)  # seconds
     count = 0
-    while not driver.current_url.startswith("{}/".format(url)):
+    #while not driver.current_url.startswith("{}/".format(url)):
+    if True:
         try:  # try to enter in credentials if username and password are on same page
             handle_same_page_username_password(driver, email, password)
         except (
@@ -321,7 +311,7 @@ def sign_in(
 
 def home_page(driver):
     try:
-        element = driver.find_element(By.LINK_TEXT, "Sign in").click()
+        element = driver.find_element(By.LINK_TEXT, "Log in").click()
     except WebDriverException:
         logger.info("WebDriverException when clicking Sign In")
 
@@ -343,16 +333,13 @@ def user_selection_page(driver):
 
 
 def handle_same_page_username_password(driver, email, password):
-    email_input = driver.find_element(By.ID, "ius-userid")
+    email_input = driver.find_element(By.ID, "username")
     if not email_input.is_displayed():
         raise ElementNotVisibleException()
     email_input.clear()  # clear email and user specified email
     email_input.send_keys(email)
-    driver.find_element(By.ID, "ius-password").send_keys(password)
-    driver.find_element(
-        By.CSS_SELECTOR,
-        '#ius-sign-in-submit-btn, [data-testid="IdentifierFirstSubmitButton"]',
-    ).submit()
+    driver.find_element(By.ID, "password").send_keys(password)
+    driver.find_element(By.ID, "Logon").submit()
 
 
 def handle_different_page_username_password(driver, email):
