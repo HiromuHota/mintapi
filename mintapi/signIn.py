@@ -284,8 +284,8 @@ def sign_in(
                 imap_server,
                 imap_folder,
             )
-        account_selection_page(driver, intuit_account)
-        password_page(driver, password)
+        # account_selection_page(driver, intuit_account)
+        # password_page(driver, password)
         # Give the overview page a chance to actually load.
         # If it doesn't, then there may be another round of MFA.
         try:
@@ -299,7 +299,7 @@ def sign_in(
                     "Login to Mint failed due to timeout in the Multifactor Method Loop"
                 )
 
-    driver.implicitly_wait(20)  # seconds
+    driver.implicitly_wait(5)  # seconds
     # Wait until the overview page has actually loaded, and if wait_for_sync==True, sync has completed.
     status_message = None
     if wait_for_sync:
@@ -333,12 +333,16 @@ def user_selection_page(driver):
 
 
 def handle_same_page_username_password(driver, email, password):
+    driver.implicitly_wait(5)  # Wait otherwise a login will fail
     email_input = driver.find_element(By.ID, "username")
     if not email_input.is_displayed():
         raise ElementNotVisibleException()
     email_input.clear()  # clear email and user specified email
     email_input.send_keys(email)
     driver.find_element(By.ID, "password").send_keys(password)
+    # driver.find_element(By.CSS_SELECTOR,
+    #         '[data-testid="show-password-button"]',
+    #     ).click()
     driver.find_element(By.ID, "Logon").submit()
 
 

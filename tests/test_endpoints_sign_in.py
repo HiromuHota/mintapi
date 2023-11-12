@@ -62,7 +62,7 @@ def test_sign_in(get_mint_driver: SeleniumBrowser):
         INTUIT_ACCOUNT,
     )
     assert get_mint_driver.driver.current_url.startswith(
-        "https://mint.intuit.com/overview"
+        "https://www.creditkarma.com/today"
     )
 
 
