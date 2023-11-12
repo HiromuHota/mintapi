@@ -211,7 +211,7 @@ def sign_in(
     mfa_token=None,
     mfa_input_callback=None,
     intuit_account=None,
-    wait_for_sync=True,
+    wait_for_sync=False,
     wait_for_sync_timeout=5 * 60,
     fail_if_stale=False,
     imap_account=None,
@@ -299,7 +299,7 @@ def sign_in(
                     "Login to Mint failed due to timeout in the Multifactor Method Loop"
                 )
 
-    driver.implicitly_wait(5)  # seconds
+    # driver.implicitly_wait(5)  # seconds
     # Wait until the overview page has actually loaded, and if wait_for_sync==True, sync has completed.
     status_message = None
     if wait_for_sync:

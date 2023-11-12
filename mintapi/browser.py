@@ -3,10 +3,13 @@ Selenium Browser
 """
 import logging
 import os
+from typing import List, Optional
 
-from mintapi.constants import JSON_HEADER, MINT_CREDIT_URL
+from mintapi.constants import JSON_HEADER, MINT_CREDIT_URL, MINT_ROOT_URL
 from mintapi.endpoints import MintEndpoints
 from mintapi.signIn import _create_web_driver_at_mint_com, sign_in
+from mintapi.filters import DateFilter, SearchFilterBuilder
+from selenium.webdriver.common.by import By
 
 logger = logging.getLogger("mintapi")
 
@@ -160,6 +163,27 @@ class SeleniumBrowser(MintEndpoints):
         # domain, we have to first load up the MINT_CREDIT_URL.  Once the new
         # domain has loaded, we can proceed with the pull of credit data.
         return self.driver.get(MINT_CREDIT_URL)
+
+    def get_transaction_data(
+        self,
+        date_filter: DateFilter.Options = DateFilter.Options.ALL_TIME,
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None,
+        category_ids: List[str] = None,
+        tag_ids: List[str] = None,
+        descriptions: List[str] = None,
+        account_ids: List[str] = None,
+        match_all_filters: bool = True,
+        include_investment: bool = False,
+        remove_pending: bool = True,
+        limit: int = 1000,
+        offset: int = 0,
+        **kwargs
+    ):
+        self.driver.find_element(By.XPATH, "//span[text()='Net worth']").click()
+        import pdb; pdb.set_trace()
+        self.driver.find_element(By.XPATH, "//span[text()='See all']").click()
+        return self.driver.page_source
 
     """
     Accessor Methods

@@ -65,6 +65,11 @@ def test_sign_in(get_mint_driver: SeleniumBrowser):
         "https://www.creditkarma.com/today"
     )
 
+def test_transaction_endpoint(do_sign_in: SeleniumBrowser):
+    transaction_data = do_sign_in.get_transaction_data()
+    import pdb; pdb.set_trace()
+    assert "metaData" not in investment_data
+    assert "lastUpdatedDate" in investment_data
 
 def test_investment_endpoint(do_sign_in: SeleniumBrowser):
     investment_data = do_sign_in.get_investment_data()[0]

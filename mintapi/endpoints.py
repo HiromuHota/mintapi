@@ -308,11 +308,11 @@ class MintEndpoints(object, metaclass=ABCMeta):
     def _get_transaction_data(self, **kwargs):
         api_url = MINT_ROOT_URL
         api_section = "/pfm"
-        uri_path = "/v1/transactions/search"
+        uri_path = "/networth/transactions"
         metadata_key = "metaData"
         data_key = "Transaction"
 
-        return self.post(
+        return self.get(
             api_url=api_url,
             api_section=api_section,
             uri_path=uri_path,
@@ -626,7 +626,7 @@ class MintEndpoints(object, metaclass=ABCMeta):
         List[Dict]
             returns a list of transaction results (each dict)
         """
-
+        import pdb; pdb.set_trace()
         search_filter = SearchFilterBuilder.search_builder(
             match_all_filters=match_all_filters,
             category_ids=category_ids,
