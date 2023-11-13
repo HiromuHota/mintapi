@@ -3,6 +3,8 @@ Selenium Browser
 """
 import logging
 import os
+import json
+import gzip
 from typing import List, Optional
 
 from mintapi.constants import JSON_HEADER, MINT_CREDIT_URL, MINT_ROOT_URL
@@ -10,6 +12,8 @@ from mintapi.endpoints import MintEndpoints
 from mintapi.signIn import _create_web_driver_at_mint_com, sign_in
 from mintapi.filters import DateFilter, SearchFilterBuilder
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 
 logger = logging.getLogger("mintapi")
 
@@ -181,9 +185,26 @@ class SeleniumBrowser(MintEndpoints):
         **kwargs
     ):
         self.driver.find_element(By.XPATH, "//span[text()='Net worth']").click()
-        import pdb; pdb.set_trace()
         self.driver.find_element(By.XPATH, "//span[text()='See all']").click()
-        return self.driver.page_source
+
+        WebDriverWait(self.driver, 20).until(
+            expected_conditions.presence_of_element_located(
+                (
+                    By.XPATH, "//span[text()='Pending']"
+                )
+            )
+        )
+
+        transactions = None
+        for request in self.driver.requests:
+            if not request.url.startswith("https://api.creditkarma.com/graphql"):
+                continue
+            body = json.loads(request.body)
+            if "query" in body and body["query"].startswith("query GetTransactions"):
+                transactions = json.loads(gzip.decompress(request.response.body))["data"]["prime"]["transactionsHub"]["transactionPage"]["transactions"]
+                break
+
+        return transactions
 
     """
     Accessor Methods

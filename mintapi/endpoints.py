@@ -626,7 +626,6 @@ class MintEndpoints(object, metaclass=ABCMeta):
         List[Dict]
             returns a list of transaction results (each dict)
         """
-        import pdb; pdb.set_trace()
         search_filter = SearchFilterBuilder.search_builder(
             match_all_filters=match_all_filters,
             category_ids=category_ids,

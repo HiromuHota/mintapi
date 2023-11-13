@@ -23,6 +23,7 @@ from selenium.webdriver.common.service import Service as ChromeService
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from seleniumrequests import Chrome
+from seleniumwire import webdriver
 
 import oathtool
 
@@ -200,7 +201,7 @@ def _create_web_driver_at_mint_com(
     # selenium will default to use the chromedriver in your project directory.
     # otherwise if the chromedriver binary is not present in project directory,
     # selenium manager will download one in .cache/selenium
-    return Chrome(options=chrome_options)
+    return webdriver.Chrome(options=chrome_options)
 
 
 def sign_in(
@@ -240,7 +241,7 @@ def sign_in(
 
     driver.implicitly_wait(0)  # seconds
 
-    # user_selection_page(driver)
+    user_selection_page(driver)
 
     driver.implicitly_wait(1)  # seconds
     count = 0
@@ -319,12 +320,12 @@ def home_page(driver):
 def user_selection_page(driver):
     # click "Use a different user ID" if needed
     try:
-        driver.find_element(By.ID, "ius-link-use-a-different-id-known-device").click()
+        driver.find_element(By.CSS_SELECTOR, '[data-testid="use-different-account-button"]').click()
         WebDriverWait(driver, 20).until(
             expected_conditions.presence_of_element_located(
                 (
-                    By.CSS_SELECTOR,
-                    '#ius-userid, #ius-identifier, #ius-option-username, [data-testid="IdentifierFirstSubmitButton"]',
+                    By.ID,
+                    'Logon',
                 )
             )
         )
