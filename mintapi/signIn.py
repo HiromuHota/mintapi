@@ -241,6 +241,7 @@ def sign_in(
 
     driver.implicitly_wait(0)  # seconds
 
+    time.sleep(1)
     user_selection_page(driver)
 
     driver.implicitly_wait(1)  # seconds
@@ -269,22 +270,22 @@ def sign_in(
 
         # Wait until logged in, just in case we need to deal with MFA.
 
-        handle_login_failures(driver)
-        if not bypass_verified_user_page(driver):
-            # if bypass_verified_user_page was present, then MFA already done
-            bypass_passwordless_login_page(driver)
-            if mfa_method is not None:
-                mfa_selection_page(driver, mfa_method)
-            mfa_page(
-                driver,
-                mfa_method,
-                mfa_token,
-                mfa_input_callback,
-                imap_account,
-                imap_password,
-                imap_server,
-                imap_folder,
-            )
+        # handle_login_failures(driver)
+        # if not bypass_verified_user_page(driver):
+        #     # if bypass_verified_user_page was present, then MFA already done
+        #     bypass_passwordless_login_page(driver)
+        #     if mfa_method is not None:
+        #         mfa_selection_page(driver, mfa_method)
+        #     mfa_page(
+        #         driver,
+        #         mfa_method,
+        #         mfa_token,
+        #         mfa_input_callback,
+        #         imap_account,
+        #         imap_password,
+        #         imap_server,
+        #         imap_folder,
+        #     )
         # account_selection_page(driver, intuit_account)
         # password_page(driver, password)
         # Give the overview page a chance to actually load.
@@ -300,7 +301,7 @@ def sign_in(
                     "Login to Mint failed due to timeout in the Multifactor Method Loop"
                 )
 
-    # driver.implicitly_wait(5)  # seconds
+    driver.implicitly_wait(20)  # seconds
     # Wait until the overview page has actually loaded, and if wait_for_sync==True, sync has completed.
     status_message = None
     if wait_for_sync:
@@ -340,11 +341,14 @@ def handle_same_page_username_password(driver, email, password):
         raise ElementNotVisibleException()
     email_input.clear()  # clear email and user specified email
     email_input.send_keys(email)
+    time.sleep(1)
     driver.find_element(By.ID, "password").send_keys(password)
+    time.sleep(1)
     # driver.find_element(By.CSS_SELECTOR,
     #         '[data-testid="show-password-button"]',
     #     ).click()
     driver.find_element(By.ID, "Logon").submit()
+    time.sleep(1)
 
 
 def handle_different_page_username_password(driver, email):
@@ -361,6 +365,7 @@ def handle_different_page_username_password(driver, email):
             By.CSS_SELECTOR,
             '#ius-identifier-first-submit-btn, [data-testid="IdentifierFirstSubmitButton"]',
         ).click()
+        time.sleep(1)
 
     # click on username if on the saved usernames page
     except (ElementNotInteractableException, ElementNotVisibleException):
@@ -680,10 +685,12 @@ def password_page(driver, password):
             By.CSS_SELECTOR,
             "#iux-password-confirmation-password, #ius-sign-in-mfa-password-collection-current-password",
         ).send_keys(password)
+        time.sleep(1)
         driver.find_element(
             By.CSS_SELECTOR,
             '#ius-sign-in-mfa-password-collection-continue-btn, [data-testid="passwordVerificationContinueButton"]',
         ).submit()
+        time.sleep(1)
     except (
         NoSuchElementException,
         StaleElementReferenceException,

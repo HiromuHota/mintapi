@@ -92,6 +92,7 @@ class SeleniumBrowser(MintEndpoints):
         if not self.driver:
             return
 
+        self.driver.get("https://accounts.creditkarma.com/logout")
         self.driver.quit()
         self.driver = None
 
