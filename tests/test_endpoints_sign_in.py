@@ -49,7 +49,10 @@ def do_sign_in(get_mint_driver: SeleniumBrowser) -> SeleniumBrowser:
         MFA_TOKEN,
         INTUIT_ACCOUNT,
     )
-    return get_mint_driver
+    yield get_mint_driver
+
+    # Sign out
+    get_mint_driver.driver.get("https://accounts.creditkarma.com/logout")
 
 
 def test_sign_in(get_mint_driver: SeleniumBrowser):
@@ -67,9 +70,9 @@ def test_sign_in(get_mint_driver: SeleniumBrowser):
 
 def test_transaction_endpoint(do_sign_in: SeleniumBrowser):
     transaction_data = do_sign_in.get_transaction_data()
-    import pdb; pdb.set_trace()
-    assert "metaData" not in investment_data
-    assert "lastUpdatedDate" in investment_data
+    assert transaction_data
+    tran = transaction_data[0]
+    assert {'id', 'date', 'description', 'status', 'amount', 'account', 'category'} <= tran.keys()
 
 def test_investment_endpoint(do_sign_in: SeleniumBrowser):
     investment_data = do_sign_in.get_investment_data()[0]

@@ -94,15 +94,15 @@ class BrowserEndpointTests(unittest.TestCase):
     #     self.assertTrue("createdDate" in account_data)
     #     self.assertTrue("lastUpdatedDate" in account_data)
 
-    # @patch.object(SeleniumBrowser, "_Mint__post_mint_endpoint")
-    # def test_get_transaction_data(self, mock_call_transactions_endpoint):
-    #     mock_call_transactions_endpoint.return_value = transactions_example
-    #     transaction_data = SeleniumBrowser().get_transaction_data()[0]
-    #     self.assertFalse("metaData" in transaction_data)
-    #     self.assertFalse("createdDate" in transaction_data)
-    #     self.assertTrue("lastUpdatedDate" in transaction_data)
-    #     self.assertTrue("parentId" in transaction_data["category"])
-    #     self.assertTrue("parentName" in transaction_data["category"])
+    @patch.object(SeleniumBrowser, "_Mint__post_mint_endpoint")
+    def test_get_transaction_data(self, mock_call_transactions_endpoint):
+        mock_call_transactions_endpoint.return_value = transactions_example
+        transaction_data = SeleniumBrowser().get_transaction_data()[0]
+        self.assertFalse("metaData" in transaction_data)
+        self.assertFalse("createdDate" in transaction_data)
+        self.assertTrue("lastUpdatedDate" in transaction_data)
+        self.assertTrue("parentId" in transaction_data["category"])
+        self.assertTrue("parentName" in transaction_data["category"])
 
     # @patch.object(SeleniumBrowser, "_Mint__get_mint_endpoint")
     # def test_get_investment_data(self, mock_call_investments_endpoint):
