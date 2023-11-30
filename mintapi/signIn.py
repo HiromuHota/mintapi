@@ -230,6 +230,10 @@ def sign_in(
     """
     driver.implicitly_wait(20)  # seconds
     driver.get(url)
+
+    if driver.current_url == "https://www.creditkarma.com/today":
+        # Already signed in, no need to do anything
+        return None
     if not beta:
         # Add 1 second delay otherwise an issue occurs when trying to click the sign in button on home page
         time.sleep(1)
