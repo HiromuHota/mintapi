@@ -191,7 +191,7 @@ class SeleniumBrowser(MintEndpoints):
         WebDriverWait(self.driver, 20).until(
             expected_conditions.presence_of_element_located(
                 (
-                    By.XPATH, "//span[text()='Pending']"
+                    By.XPATH, "//span[text()='Transactions']"
                 )
             )
         )
